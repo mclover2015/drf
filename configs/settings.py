@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     # 'rest_framework',
 
     #my_apps
-    'cars',
+    'apps.cars',
+    'core',
 ]
 
 MIDDLEWARE = [
