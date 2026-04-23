@@ -42,7 +42,7 @@ version = "1.4.2"
 description = "foreman reads from .env. manage.py doesn't. Let's fix that."
 optional = false
 python-versions = "*"
-groups = ["main"]
+groups = ["dev"]
 files = [
     {file = "django-dotenv-1.4.2.tar.gz", hash = "sha256:3812bb0f4876cf31f902aad140f0645e120e51ee30eb7c40c22050f58a0e4adb"},
     {file = "django_dotenv-1.4.2-py2.py3-none-any.whl", hash = "sha256:a9b1b40a70bd321acd231926acedb9bd2c5e873e33a1873b34a7276d196a765e"},
@@ -127,4 +127,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "b91b4bf6fbbd2b83e8789f84c5f7613a3110aa81b2233a893fa3626ea6cfb9b6"
+content-hash = "5f39cd8ddd632dd97c612bc2d5aeed342f79723c9ef0d0136045e791b0227599"
