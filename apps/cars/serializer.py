@@ -11,10 +11,10 @@ class CarSerializer(serializers.ModelSerializer):
 
     def validate_brand(self, value):
         if value == 'RIO':
-            raise ValidationError('RIO is not available to create')
+            raise ValidationError('RIO is blocked to create')
         return value
 
     def validate(self, item):
-        if item['brand'] == item['year']:
-            raise ValidationError('brand value == year value!!!')
+        if item['brand'] == item['price']:
+            raise ValidationError('brand cant equal price')
         return item

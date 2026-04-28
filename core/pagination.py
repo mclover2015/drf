@@ -14,8 +14,8 @@ class PagePagination(PageNumberPagination):
         count = self.page.paginator.count
         total_pages = math.ceil(count / self.get_page_size(self.request))
         return Response({
-            'total items': count,
-            'total pages': total_pages,
+            'count': count,
+            'total_pages': total_pages,
             'prev': bool(self.get_previous_link()),
             'next': bool(self.get_next_link()),
             'data': data
