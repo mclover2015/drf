@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from .managers import CarManager
 from .models import CarModel
 
 
@@ -18,3 +19,5 @@ class CarSerializer(serializers.ModelSerializer):
         if item['brand'] == item['price']:
             raise ValidationError('brand cant equal price')
         return item
+
+
