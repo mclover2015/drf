@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
     'django_filters',
+    'rest_framework_simplejwt',
 
     # my_apps
     'core',
