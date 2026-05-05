@@ -2,13 +2,14 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, UpdateAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
-from core.dataclasses.user_dataclass import ProfileDataClass
 from core.permissions.is_admin_or_write_only_permission import IsAdminOrWriteOnlyPermission
+from core.permissions.is_superuser import IsSuperUserPermission
 
 from .models import ProfileModel
+from .models import UserModel as User
 from .serializers import ProfileAvatarSerializer, UserSerializer
 
 UserModel = get_user_model()
@@ -41,3 +42,72 @@ class UserAddAvatarView(UpdateAPIView):
         profile: ProfileModel = self.get_object()
         profile.avatar.delete()
         super().perform_update(serializer)
+
+
+class UserToAdminView(GenericAPIView):
+    permission_classes = (IsSuperUserPermission,)
+
+    def get_queryset(self):
+        return UserModel.objects.exclude(id=self.request.user.id)
+
+    def put(self, *args, **kwargs):
+        user: User = self.get_object()
+        if not user.is_staff:
+            user.is_staff = True
+            user.save()
+
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AdminToUserView(GenericAPIView):
+    permission_classes = (IsSuperUserPermission,)
+
+    def get_queryset(self):
+        return UserModel.objects.exclude(id=self.request.user.id)
+
+    def put(self, *args, **kwargs):
+        user: User = self.get_object()
+        if user.is_staff:
+            user.is_staff = False
+            user.save()
+
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BlockUserView(GenericAPIView):
+    permission_classes = (IsAdminUser,)
+
+    def get_queryset(self):
+        return UserModel.objects.exclude(id=self.request.user.id)
+
+    def put(self, *args, **kwargs):
+        user: User = self.get_object()
+        # Забороняємо блокувати суперадмінів
+        if user.is_superuser:
+            return Response(
+                {"detail": "Не можна блокувати суперадміна."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        if user.is_active:
+            user.is_active = False
+            user.save()
+
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UnblockUserView(GenericAPIView):
+    permission_classes = (IsAdminUser,)
+
+    def get_queryset(self):
+        return UserModel.objects.exclude(id=self.request.user.id)
+
+    def put(self, *args, **kwargs):
+        user: User = self.get_object()
+        if not user.is_active:
+            user.is_active = True
+            user.save()
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
