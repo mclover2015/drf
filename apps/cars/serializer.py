@@ -8,7 +8,7 @@ from .models import CarModel
 class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarModel
-        fields = ('id', 'brand', 'price', 'year', 'created_at', 'updated_at')
+        fields = ('id', 'brand', 'price','body_type', 'year', 'created_at', 'updated_at')
 
     def validate_brand(self, value):
         if value == 'RIO':

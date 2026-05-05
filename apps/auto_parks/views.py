@@ -1,18 +1,17 @@
-from django.shortcuts import render
 from rest_framework import status
-
-from rest_framework.generics import ListCreateAPIView, GenericAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from apps.auto_parks.models import AutoPark
 from apps.auto_parks.serializers import AutoParkSerializer
-
 from apps.cars.serializer import CarSerializer
 
 
 class AutoParkListCreateView(ListCreateAPIView):
     queryset = AutoPark.objects.all()
     serializer_class = AutoParkSerializer
+    permission_classes = (AllowAny,)
 
 
 class AutoParkRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
