@@ -1,5 +1,5 @@
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .filters import CarFilter
 from .models import CarModel
@@ -10,6 +10,7 @@ class CarListCreateView(ListAPIView):
     queryset = CarModel.objects.all()
     serializer_class = CarSerializer
     filterset_class = CarFilter
+    permission_classes = (AllowAny,)
 
 
 class CarAddPhotoView(UpdateAPIView):

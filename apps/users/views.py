@@ -2,11 +2,12 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, UpdateAPIView
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 from core.permissions.is_admin_or_write_only_permission import IsAdminOrWriteOnlyPermission
 from core.permissions.is_superuser import IsSuperUserPermission
+from core.services.email_service import EmailService
 
 from .models import ProfileModel
 from .models import UserModel as User
@@ -111,3 +112,5 @@ class UnblockUserView(GenericAPIView):
             user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
