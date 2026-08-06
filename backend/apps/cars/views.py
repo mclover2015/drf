@@ -7,6 +7,11 @@ from .serializer import CarPhotoSerializer, CarSerializer
 
 
 class CarListCreateView(ListAPIView):
+    """"
+
+        get:
+            Create a new car
+    """
     queryset = CarModel.objects.all()
     serializer_class = CarSerializer
     filterset_class = CarFilter

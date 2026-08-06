@@ -1,9 +1,12 @@
 from django.contrib.auth import get_user_model
+from django.utils.decorators import method_decorator
 
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
+
+from drf_yasg.utils import swagger_auto_schema
 
 from core.permissions.is_admin_or_write_only_permission import IsAdminOrWriteOnlyPermission
 from core.permissions.is_superuser import IsSuperUserPermission
@@ -15,7 +18,7 @@ from .serializers import ProfileAvatarSerializer, UserSerializer
 
 UserModel = get_user_model()
 
-
+@method_decorator(name='get', decorator=swagger_auto_schema(security=[]))
 class UserListCreateView(ListCreateAPIView):
     serializer_class = UserSerializer
     queryset = UserModel.objects.all()
@@ -102,9 +105,13 @@ class BlockUserView(GenericAPIView):
 class UnblockUserView(GenericAPIView):
     permission_classes = (IsAdminUser,)
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
     def get_queryset(self):
         return UserModel.objects.exclude(id=self.request.user.id)
 
+    @swagger_auto_schema(security=[])
     def put(self, *args, **kwargs):
         user: User = self.get_object()
         if not user.is_active:
